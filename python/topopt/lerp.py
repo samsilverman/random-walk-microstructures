@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 def lerp(l0: float, l1: float, step: int, num_steps: int) -> float:
     """Linearly interpolate between two values over a fixed number of steps.
 

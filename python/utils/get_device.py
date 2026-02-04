@@ -1,9 +1,10 @@
 from __future__ import annotations
 import torch
 
+
 def get_device() -> torch.device:
     """Determines the appropriate device for tensor computations.
-    
+
     Returns
     -------
     device : torch.device

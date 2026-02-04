@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
     from torch import Tensor
 
+
 class Trainer:
     """Training logic.
 
@@ -136,10 +137,10 @@ class Trainer:
                 seconds = int(epoch_elapsed % 60)
                 milliseconds = int(epoch_elapsed % 1 * 1000)
 
-                print(f'Time:            {minutes:02}:{seconds:02}.{milliseconds:03}')
-                print(f'Train loss:      {train_loss}')
-                print(f'Valid loss:      {valid_loss}')
-                print(f'Best vaid loss:  {best_loss}')
+                print(f'Time: {minutes:02}:{seconds:02}.{milliseconds:03}')
+                print(f'Train loss: {train_loss}')
+                print(f'Valid loss: {valid_loss}')
+                print(f'Best vaid loss: {best_loss}')
                 print(f'Best vaid epoch: {best_epoch}')
 
         # load best model at end of training

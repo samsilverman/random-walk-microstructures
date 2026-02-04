@@ -63,6 +63,7 @@ class OutputsProcessor(nn.Module):
     """A PyTorch analogue of the processor from `get_outputs_processor()`.
 
     """
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -87,7 +88,7 @@ class OutputsProcessor(nn.Module):
         off_diagonal = signed_log1p(off_diagonal)
 
         diagonal_mean = diagonal.mean(dim=0, keepdim=True)
-        diagonal_std  = diagonal.std(dim=0, unbiased=False, keepdim=True).clamp_min(1e-8)
+        diagonal_std = diagonal.std(dim=0, unbiased=False, keepdim=True).clamp_min(1e-8)
 
         off_diagonal_mean = off_diagonal.mean(dim=0, keepdim=True)
         off_diagonal_std = off_diagonal.std(dim=0, unbiased=False, keepdim=True).clamp_min(1e-8)

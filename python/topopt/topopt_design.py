@@ -9,6 +9,7 @@ class TopOptDesign(nn.Module):
     """Trainable microstructure densities for binary topology optimization.
 
     """
+
     def __init__(self) -> None:
         """Initialize TopOptDesign.
 
@@ -33,8 +34,8 @@ class TopOptDesign(nn.Module):
 
         """
         # Keeps continuous densities in [0,1] range
-        rho_cont = torch.sigmoid(self.rho_cont_)
-        rho_cont_rounded  = BinarySTE.apply(rho_cont)
+        rho_cont = torch.sigmoid(input=self.rho_cont_)
+        rho_cont_rounded = BinarySTE.apply(rho_cont)
         rho_binary = rho_cont + (rho_cont_rounded - rho_cont).detach()
 
         return rho_binary, rho_cont

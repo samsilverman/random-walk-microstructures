@@ -1,6 +1,7 @@
 from __future__ import annotations
 import torch
 
+
 def tile_design(design: torch.Tensor) -> torch.Tensor:
     """Tile a microstructure design into a 3x3 mosaic with dimmed neighbors.
 
@@ -16,7 +17,7 @@ def tile_design(design: torch.Tensor) -> torch.Tensor:
 
     """
     light = 0.5 * design
-    
+
     row0 = torch.cat([light, light, light], dim=1)
     row1 = torch.cat([light, design, light], dim=1)
     row2 = torch.cat([light, light, light], dim=1)

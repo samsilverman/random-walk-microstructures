@@ -12,7 +12,7 @@ from matplotlib.colors import ListedColormap
 
 def main() -> None:
     save_dir = Path(__file__).resolve().parent.parent / 'data' / 'topopt_designs'
-    
+
     # Input CSV file
     file = save_dir / 'ortho_80.csv'
 

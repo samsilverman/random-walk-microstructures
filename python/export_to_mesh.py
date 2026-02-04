@@ -32,7 +32,7 @@ def main() -> None:
     ny = 6
 
     # Extrusion thickness (OBJ z-height)
-    # Set to ¼ that of the x- and y-dimension sizes 
+    # Set to ¼ that of the x- and y-dimension sizes
     t = (32 * nx) // 4
 
     save_dir = Path(__file__).resolve().parent.parent / 'data' / 'topopt_designs'
@@ -209,6 +209,7 @@ def main() -> None:
             file.write(f'f {bottom_i} {top_j} {top_i}\n')
 
     plt.show()
+
 
 if __name__ == "__main__":
     main()

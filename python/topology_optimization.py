@@ -128,7 +128,7 @@ def topology_optimization(epochs: int,
         curr_lambda_density = lerp(l0=lambda_density[0], l1=lambda_density[1], step=epoch, num_steps=epochs)
 
         objective = objective_function(C)
-        smooth  = curr_lambda_smooth * smoothness_penalty(inputs=rho_cont)
+        smooth = curr_lambda_smooth * smoothness_penalty(inputs=rho_cont)
         density = curr_lambda_density * density_penalty(inputs=rho_binary, target_density=target_density)
 
         loss = objective + smooth + density
@@ -181,7 +181,7 @@ def iso_objective(C: torch.Tensor) -> torch.Tensor:
     """
     S = torch.inverse(input=C)
 
-    return S[0,0] + S[1,1]
+    return S[0, 0] + S[1, 1]
 
 
 def ortho_objective(C: torch.Tensor) -> torch.Tensor:
@@ -201,7 +201,7 @@ def ortho_objective(C: torch.Tensor) -> torch.Tensor:
     S = torch.inverse(input=C)
 
     # return 0.5 * (S[1,1] / S[0,0] - 3.0001) ** 2
-    return 0.5 * (S[1,1] / S[0,0] - 3) ** 2
+    return 0.5 * (S[1, 1] / S[0, 0] - 3) ** 2
 
 
 def main():
