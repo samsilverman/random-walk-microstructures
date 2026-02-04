@@ -48,25 +48,25 @@ def main() -> None:
     ###########################
     cmap = LinearSegmentedColormap.from_list(name='white_to_C0', colors=['white', 'C0'], N=256)
 
-    _, axes = plt.subplots(nrows=1, ncols=6, constrained_layout=True, figsize=(2 * 6.4, 0.5 * 4.8))
+    _, axes = plt.subplots(nrows=2, ncols=3, constrained_layout=True, figsize=(6.4, 4.8))
 
     #########################################
     ########## Step 1: Load design ##########
     #########################################
     design = np.loadtxt(fname=in_file, delimiter=',', dtype=float)
 
-    axes[0].imshow(design, cmap=cmap, origin='upper')
-    axes[0].axis('off')
-    axes[0].set_title('Design')
+    axes[0, 0].imshow(design, cmap=cmap, origin='upper')
+    axes[0, 0].axis('off')
+    axes[0, 0].set_title('Design')
 
     ##################################
     ########## Step 2: Tile ##########
     ##################################
     tiled = np.tile(A=design, reps=(nx, ny))
 
-    axes[1].imshow(tiled, cmap=cmap, origin='upper')
-    axes[1].axis('off')
-    axes[1].set_title('Tiled')
+    axes[0, 1].imshow(tiled, cmap=cmap, origin='upper')
+    axes[0, 1].axis('off')
+    axes[0, 1].set_title('Tiled')
 
     ############################################################
     ########## Step 3: Remove disconnected components ##########
@@ -81,9 +81,9 @@ def main() -> None:
     largest_label = counts.argmax()
     largest_region = labels == largest_label
 
-    axes[2].imshow(largest_region, cmap=cmap, origin='upper')
-    axes[2].axis('off')
-    axes[2].set_title('Filtered')
+    axes[0, 2].imshow(largest_region, cmap=cmap, origin='upper')
+    axes[0, 2].axis('off')
+    axes[0, 2].set_title('Filtered')
 
     ###############################################
     ########## Step 4: Upsample & smooth ##########
@@ -95,9 +95,9 @@ def main() -> None:
     upsampled = np.repeat(a=np.repeat(a=padded, repeats=1, axis=0), repeats=1, axis=1)
     smooth = filters.gaussian(image=upsampled, sigma=1)
 
-    axes[3].imshow(smooth, cmap=cmap, origin="upper")
-    axes[3].axis('off')
-    axes[3].set_title('Upsampled & Smoothed')
+    axes[1, 0].imshow(smooth, cmap=cmap, origin="upper")
+    axes[1, 0].axis('off')
+    axes[1, 0].set_title('Upsampled & Smoothed')
 
     ##############################################
     ########## Step 5: Marching squares ##########
@@ -114,11 +114,11 @@ def main() -> None:
     # reduce size
     contours = [measure.approximate_polygon(coords=contour, tolerance=0.1) for contour in contours]
 
-    axes[4].imshow(upsampled, cmap=cmap, origin="upper")
+    axes[1, 1].imshow(upsampled, cmap=cmap, origin="upper")
     for contour in contours:
-        axes[4].plot(contour[:, 0], contour[:, 1], color='C1')
-    axes[4].axis('off')
-    axes[4].set_title('Contours')
+        axes[1, 1].plot(contour[:, 0], contour[:, 1], color='C1')
+    axes[1, 1].axis('off')
+    axes[1, 1].set_title('Contours')
 
     #########################################
     ########## Step 6: Triangulate ##########
@@ -157,18 +157,18 @@ def main() -> None:
         A = dict(vertices=vertices, segments=segments, holes=holes)
     B = tr.triangulate(A, 'pq')
 
-    axes[5].add_collection(
+    axes[1, 2].add_collection(
         PolyCollection(
             verts=B['vertices'][B['triangles']],
             edgecolors='black',
             facecolors='C0'
         )
     )
-    axes[5].set_xlim(axes[4].get_xlim())
-    axes[5].set_ylim(axes[4].get_ylim())
-    axes[5].set_aspect('equal')
-    axes[5].axis('off')
-    axes[5].set_title('Triangulation')
+    axes[1, 2].set_xlim(axes[1, 1].get_xlim())
+    axes[1, 2].set_ylim(axes[1, 1].get_ylim())
+    axes[1, 2].set_aspect('equal')
+    axes[1, 2].axis('off')
+    axes[1, 2].set_title('Triangulation')
 
     plt.show()
 
@@ -207,8 +207,6 @@ def main() -> None:
 
             file.write(f'f {bottom_i} {bottom_j} {top_j}\n')
             file.write(f'f {bottom_i} {top_j} {top_i}\n')
-
-    plt.show()
 
 
 if __name__ == "__main__":
