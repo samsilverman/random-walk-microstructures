@@ -4,7 +4,7 @@
 
 ![Teaser](https://github.com/samsilverman/random-walk-microstructures/blob/main/assets/images/teaser.png)
 
-This repository contains the code for our paper ACM SCF 2025 paper Random-Walk Microstructures for Diﬀerentiable Topology Optimization.
+This repository contains the code for our ACM SCF 2025 paper “Random-Walk Microstructures for Differentiable Topology Optimization.”
 
    >Samuel Silverman, Dylan Balter, Keith A. Brown, Emily Whiting  
    [*Random-Walk Microstructures for Differentiable Topology Optimization*](https://sam-silverman.com/assets/pdf/Silverman-RandomWalkMicrostructures.pdf)  
@@ -16,8 +16,8 @@ The C++ libraries [rwmicro](https://github.com/samsilverman/rwmicro) and [monad]
 
 `data/` contains:
 
-- `inputs.npz`: (100000, 1, 32, 32) numpy matrix of microstructure designs
-- `outputs.npz`: (100000, 6) numpy matrix of unique coefficients of the homogenized stiffness tensor ($\overline{\mathbf{C}}_{11}$, $\overline{\mathbf{C}}_{22}$, $\overline{\mathbf{C}}_{33}$, $\overline{\mathbf{C}}_{12}$, $\overline{\mathbf{C}}_{13}$, $\overline{\mathbf{C}}_{23}$)
+- `inputs.npz`: (100000, 1, 32, 32) NumPy array of microstructure designs
+- `outputs.npz`: (100000, 6) NumPy array of unique coefficients of the homogenized stiffness tensor ($`\overline{\mathbf{C}}_{11}`$, $`\overline{\mathbf{C}}_{22}`$, $`\overline{\mathbf{C}}_{33}`$, $`\overline{\mathbf{C}}_{12}`$, $`\overline{\mathbf{C}}_{13}`$, $`\overline{\mathbf{C}}_{23}`$)
 - `topopt_designs/`: CSV and OBJ files for each of the topology optimization results (isotropic and orthotropic at 50%, 60%, 70%, and 80% density)
 
 ## Code
@@ -33,7 +33,7 @@ The following scripts are provided in `python/`:
 | `export_to_mesh.py` | Script for microstructure design CSV → OBJ export. | ![export_to_mesh.py screenshot](https://github.com/samsilverman/random-walk-microstructures/blob/main/assets/images/export_to_mesh.svg) |
 
 > [!NOTE]
-> A [Conda](https://docs.conda.io/en/latest/) environement is provided:
+> A [Conda](https://docs.conda.io/en/latest/) environment is provided:
 >
 > ```bash
 > conda env create -f /path/to/environment.yml
@@ -52,7 +52,7 @@ This work was supported by a Focused Research Program from the Rafik B. Hariri I
 
 ## Citation
 
-```text
+```bibtex
 @inproceedings{Silverman:2025:RandomWalkMicrostructures,
 author = {Silverman, Samuel and Balter, Dylan and Brown, Keith A. and Whiting, Emily},
 title = {Random-Walk Microstructures for Differentiable Topology Optimization},
