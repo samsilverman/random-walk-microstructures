@@ -58,7 +58,7 @@ def main() -> None:
     optimizer = optim.Adam(params=model.parameters(), lr=1e-4)
 
     # Train
-    model_dir = Path(__file__).resolve().parent.parent / 'models'
+    save_file = Path(__file__).resolve().parent.parent / 'models' / 'model.pt'
 
     trainer = Trainer(model=model,
                       criterion=criterion,
@@ -66,8 +66,8 @@ def main() -> None:
                       train_loader=train_loader,
                       valid_loader=valid_loader,
                       epochs=1000,
-                      resume=True,
-                      save_file=model_dir / 'model.pt',
+                      resume=False,
+                      save_file=save_file,
                       data_transform=data_transform)
 
     trainer.train(verbose=True)

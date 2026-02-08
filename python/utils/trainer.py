@@ -92,9 +92,9 @@ class Trainer:
 
         """
         if verbose:
-            print(f'{"-" * 5}Training Start (Device: {self.device_}){"-" * 5}')
+            print(f'{"-" * 5}Training start (device: {self.device_}){"-" * 5}')
 
-            training_start = time.time()
+            start_time = time.time()
 
         best_loss = float('inf')
         best_epoch = 0
@@ -143,7 +143,7 @@ class Trainer:
                 print(f'Best vaid loss: {best_loss}')
                 print(f'Best vaid epoch: {best_epoch}')
 
-        # load best model at end of training
+        # load and save best model at end of training
         load_checkpoint(file=self.checkpoint_file_,
                         model=self.model_,
                         optimizer=self.optimizer_)
@@ -151,13 +151,13 @@ class Trainer:
         save_state_dict(model=self.model_, file=self.save_file_)
 
         if verbose:
-            training_elapsed = time.time() - training_start
-            hours = int(training_elapsed // 3600)
-            minutes = int(training_elapsed % 3600 // 60)
-            seconds = int(training_elapsed % 60)
-            milliseconds = int(training_elapsed % 1 * 1000)
+            elapsed_time = time.time() - start_time
+            hours = int(elapsed_time // 3600)
+            minutes = int(elapsed_time % 3600 // 60)
+            seconds = int(elapsed_time % 60)
+            milliseconds = int(elapsed_time % 1 * 1000)
 
-            print(f'\n{"-" * 5}Training End{"-" * 5}')
+            print(f'\n{"-" * 5}Training end{"-" * 5}')
             print(f'Time: {hours:02}:{minutes:02}:{seconds:02}.{milliseconds:03}')
             print(f'Best valid loss: {best_loss}')
             print(f'Best vaid epoch: {best_epoch}')
@@ -172,14 +172,14 @@ class Trainer:
         Parameters
         ----------
         data_loader : torch.utils.data.DataLoader
-            The DataLoader.
+            DataLoader.
         grad_enabled : bool
             Set to `True` for training. Set to `False` for validation.
 
         Returns
         -------
         loss : float
-            The average loss for the epoch.
+            Average loss for the epoch.
 
         """
         if grad_enabled:
@@ -195,8 +195,8 @@ class Trainer:
             if self.data_transform_ is not None and grad_enabled:
                 inputs, targets = self.data_transform_(inputs, targets)
 
-            inputs = inputs.to(self.device_, non_blocking=True)
-            targets = targets.to(self.device_, non_blocking=True)
+            inputs = inputs.to(device=self.device_, non_blocking=True)
+            targets = targets.to(device=self.device_, non_blocking=True)
 
             if grad_enabled:
                 self.optimizer_.zero_grad()
@@ -220,17 +220,16 @@ class Trainer:
         """Visualize losses from training.
 
         """
-        figure, axis = plt.subplots()
+        _, ax = plt.subplots(nrows=1, ncols=1, constrained_layout=True, figsize=(6.4, 4.8))
 
         epochs = range(self.epochs_)
 
-        axis.plot(epochs, self.train_losses_, label='Training loss')
-        axis.plot(epochs, self.valid_losses_, label='Validation loss')
+        ax.plot(epochs, self.train_losses_, label='Training loss')
+        ax.plot(epochs, self.valid_losses_, label='Validation loss')
 
-        axis.set_title('Loss Curves')
-        axis.set_xlabel('Epoch')
-        axis.set_ylabel('Value')
-        axis.legend(loc='best')
+        ax.set_title('Loss Curves')
+        ax.set_xlabel('Epoch')
+        ax.set_ylabel('Value')
+        ax.legend(loc='best')
 
-        figure.tight_layout()
         plt.show()

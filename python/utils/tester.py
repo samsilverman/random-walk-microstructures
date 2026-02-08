@@ -5,8 +5,8 @@ import torch
 from utils import get_device
 
 if TYPE_CHECKING:
-    from torch.nn import Module
     from torch import Tensor
+    from torch.nn import Module
     from torch.utils.data import DataLoader
 
 
@@ -55,13 +55,13 @@ class Tester:
         Returns
         -------
         loss : float
-            The testing loss.
+            Testing loss.
 
         """
         if verbose:
-            print(f'{"-" * 5}Testing Start (Device: {self.device_}){"-" * 5}')
+            print(f'{"-" * 5}Testing start (device: {self.device_}){"-" * 5}')
 
-            testing_start = time.time()
+            start_time = time.time()
 
         self.model_.eval()
 
@@ -86,13 +86,13 @@ class Tester:
         epoch_loss = running_loss / len(self.test_loader_.dataset)
 
         if verbose:
-            training_elapsed = time.time() - testing_start
-            minutes = int(training_elapsed // 60)
-            seconds = int(training_elapsed % 60)
-            milliseconds = int(training_elapsed % 1 * 1000)
+            elapsed_time = time.time() - start_time
+            minutes = int(elapsed_time // 60)
+            seconds = int(elapsed_time % 60)
+            milliseconds = int(elapsed_time % 1 * 1000)
 
-            print(f'test loss: {epoch_loss}')
-            print(f'{"-" * 5}Testing End{"-" * 5}')
+            print(f'{"-" * 5}Testing end{"-" * 5}')
+            print(f'Test loss: {epoch_loss}')
             print(f'Time: {minutes:02}:{seconds:02}.{milliseconds:03}')
 
         return epoch_loss

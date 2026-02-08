@@ -9,7 +9,7 @@ dependencies:
     - matplotlib==3.9.2
     - numpy==1.26.4
     - pylint==3.3.1
+    - scikit-image==0.24.0
     - scikit-learn==1.5.2
     - torch==2.2.2
-    - scikit-image==0.24.0
     - triangle==20230923

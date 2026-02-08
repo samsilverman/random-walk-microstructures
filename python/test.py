@@ -29,7 +29,8 @@ def main() -> None:
 
     outputs_processor = get_outputs_processor()
 
-    outputs_train = outputs_processor.fit(outputs_train)
+    outputs_processor.fit(outputs_train)
+
     outputs_test = outputs_processor.transform(outputs_test)
 
     # Dataset
