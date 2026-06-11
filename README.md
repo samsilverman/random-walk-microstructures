@@ -17,27 +17,44 @@ The C++ libraries [rwmicro](https://github.com/samsilverman/rwmicro) and [monad]
 `data/` contains:
 
 - `inputs.npz`: (100000, 1, 32, 32) NumPy array of microstructure designs
-- `outputs.npz`: (100000, 6) NumPy array of unique coefficients of the homogenized stiffness tensor ($`\overline{\mathbf{C}}_{11}`$, $`\overline{\mathbf{C}}_{22}`$, $`\overline{\mathbf{C}}_{33}`$, $`\overline{\mathbf{C}}_{12}`$, $`\overline{\mathbf{C}}_{13}`$, $`\overline{\mathbf{C}}_{23}`$)
-- `topopt_designs/`: CSV and OBJ files for each of the topology optimization results (isotropic and orthotropic at 50%, 60%, 70%, and 80% density)
+- `outputs.npz`: (100000, 6) NumPy array of unique coefficients of the homogenized stiffness tensor ($`\overline{\mathbf{C}}_{11}`$, $`\overline{\mathbf{C}}_{22}`$, $`\overline{\mathbf{C}}_{33}`$, $`\overline{\mathbf{C}}_{12}`$, $`\overline{\mathbf{C}}_{13}`$, $`\overline{\mathbf{C}}_{23}`$). 
+These values were simulated assuming a base material with Young’s modulus $E=2100$ MPa and Poisson’s ratio $\nu=0.39$, corresponding to Formlabs Tough 2000 resin.
+- `topopt_designs/`: topology optimization results (isotropic and orthotropic at 50%, 60%, 70%, and 80% density), with CSV files storing unit-cell designs and OBJ files storing the corresponding `6x6` tiled mesh
+
+## Getting Started
+
+Clone the repository and create the provided Conda environment for convenience and reproducibility.
+Then install the package locally so the command-line tools can import `random_walk_microstructures` directly.
+
+```bash
+git clone https://github.com/samsilverman/random-walk-microstructures.git
+cd random-walk-microstructures
+conda env create -f environment.yml
+conda activate random-walk-microstructures
+pip install -e .
+```
 
 ## Code
 
-The following scripts are provided in `python/`:
+The codebase is organized into two parts:
+
+- `src/random_walk_microstructures/`: the main Python package
+- `tools/`: command-line entry points
 
 | Script | Description | Image |
 | - | - | - |
-| `train.py` | Script for training the surrogate CNN model. | |
-| `test.py` | Script for testing the surrogate CNN model. | |
-| `topology_optimization.py` | Gradient-based topology optimization using the trained CNN surrogate. | ![topology_optimization.py screenshot](https://github.com/samsilverman/random-walk-microstructures/blob/main/assets/images/topology_optimization.svg) |
-| `visualize_design.py` |Visualize a CSV microstructure design (supports periodic tiling). | ![visualize_design.py screenshot](https://github.com/samsilverman/random-walk-microstructures/blob/main/assets/images/visualize_design.svg) |
-| `export_to_mesh.py` | Script for microstructure design CSV → OBJ export. | ![export_to_mesh.py screenshot](https://github.com/samsilverman/random-walk-microstructures/blob/main/assets/images/export_to_mesh.svg) |
+| `train.py` | Train the surrogate CNN model. | |
+| `test.py` | Test the trained surrogate CNN model. | |
+| `topopt.py` | Gradient-based topology optimization using the trained CNN surrogate. | ![topopt.py screenshot](https://github.com/samsilverman/random-walk-microstructures/blob/main/assets/images/topology_optimization.svg) |
+| `visualize.py` | Visualize a CSV microstructure design. | ![visualize.py screenshot](https://github.com/samsilverman/random-walk-microstructures/blob/main/assets/images/visualize_design.svg) |
+| `export_to_mesh.py` | Export a CSV microstructure design to an OBJ mesh. | ![export_to_mesh.py screenshot](https://github.com/samsilverman/random-walk-microstructures/blob/main/assets/images/export_to_mesh.svg) |
 
 > [!NOTE]
-> A [Conda](https://docs.conda.io/en/latest/) environment is provided:
+> Each tool can be run from the repository root.
+> For info on a specific tool/args run:
 >
 > ```bash
-> conda env create -f /path/to/environment.yml
-> conda activate random-walk-microstructures
+> python tools/[TOOL].py --help
 > ```
 
 ## Maintainers
@@ -73,4 +90,4 @@ series = {SCF '25}
 
 ## License
 
-Released under the [MIT License](https://github.com/samsilverman/rwmicro/blob/main/LICENSE).
+Released under the [MIT License](https://github.com/samsilverman/random-walk-microstructures/blob/main/LICENSE).
