@@ -140,8 +140,8 @@ class Trainer:
                 print(f'Time: {minutes:02}:{seconds:02}.{milliseconds:03}')
                 print(f'Train loss: {train_loss}')
                 print(f'Valid loss: {valid_loss}')
-                print(f'Best vaid loss: {best_loss}')
-                print(f'Best vaid epoch: {best_epoch}')
+                print(f'Best valid loss: {best_loss}')
+                print(f'Best valid epoch: {best_epoch}')
 
         # load and save best model at end of training
         load_checkpoint(file=self.checkpoint_file_,
@@ -160,7 +160,7 @@ class Trainer:
             print(f'\n{"-" * 5}Training end{"-" * 5}')
             print(f'Time: {hours:02}:{minutes:02}:{seconds:02}.{milliseconds:03}')
             print(f'Best valid loss: {best_loss}')
-            print(f'Best vaid epoch: {best_epoch}')
+            print(f'Best valid epoch: {best_epoch}')
 
             self.visualize_losses_()
 
