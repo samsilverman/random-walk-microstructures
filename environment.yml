@@ -2,7 +2,7 @@ name: random-walk-microstructures
 channels:
   - conda-forge
 dependencies:
-  - conda-forge::pip=21.2.4
+  - conda-forge::pip=26.0.1
   - conda-forge::python=3.9.12
   - pip:
     - autopep8==2.3.1
@@ -12,4 +12,5 @@ dependencies:
     - scikit-image==0.24.0
     - scikit-learn==1.5.2
     - torch==2.2.2
+    - tqdm==4.68.2
     - triangle==20230923
