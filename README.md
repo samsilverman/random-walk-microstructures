@@ -17,7 +17,7 @@ The C++ libraries [rwmicro](https://github.com/samsilverman/rwmicro) and [monad]
 `data/` contains:
 
 - `inputs.npz`: (100000, 1, 32, 32) NumPy array of microstructure designs
-- `outputs.npz`: (100000, 6) NumPy array of unique coefficients of the homogenized stiffness tensor ($`\overline{\mathbf{C}}_{11}`$, $`\overline{\mathbf{C}}_{22}`$, $`\overline{\mathbf{C}}_{33}`$, $`\overline{\mathbf{C}}_{12}`$, $`\overline{\mathbf{C}}_{13}`$, $`\overline{\mathbf{C}}_{23}`$). 
+- `outputs.npz`: (100000, 6) NumPy array of unique coefficients of the homogenized stiffness tensor ($`\overline{\mathbf{C}}_{11}`$, $`\overline{\mathbf{C}}_{22}`$, $`\overline{\mathbf{C}}_{33}`$, $`\overline{\mathbf{C}}_{12}`$, $`\overline{\mathbf{C}}_{13}`$, $`\overline{\mathbf{C}}_{23}`$).
 These values were simulated assuming a base material with Young’s modulus $E=2100$ MPa and Poisson’s ratio $\nu=0.39$, corresponding to Formlabs Tough 2000 resin.
 - `topopt_designs/`: topology optimization results (isotropic and orthotropic at 50%, 60%, 70%, and 80% density), with CSV files storing unit-cell designs and OBJ files storing the corresponding `6x6` tiled mesh
 
