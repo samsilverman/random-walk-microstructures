@@ -6,9 +6,9 @@
 
 This repository contains the code for our ACM SCF 2025 paper “Random-Walk Microstructures for Differentiable Topology Optimization.”
 
-   >Samuel Silverman, Dylan Balter, Keith A. Brown, Emily Whiting  
-   [*Random-Walk Microstructures for Differentiable Topology Optimization*](https://sam-silverman.com/assets/pdf/Silverman-RandomWalkMicrostructures.pdf)  
-   Proceedings of the  ACM Symposium on Computational Fabrication (2025)
+   > Samuel Silverman, Dylan Balter, Keith A. Brown, Emily Whiting  
+   > [*Random-Walk Microstructures for Differentiable Topology Optimization*](https://sam-silverman.com/assets/pdf/Silverman-RandomWalkMicrostructures.pdf)  
+   > Proceedings of the  ACM Symposium on Computational Fabrication (2025)
 
 ## Data
 
