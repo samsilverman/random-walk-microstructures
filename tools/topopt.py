@@ -255,7 +255,7 @@ def main() -> None:
     # Model
     model = CNN().to(dtype=DTYPE, device=DEVICE)
 
-    state_dict = torch.load(f=args.out_dir / 'model.pt', map_location=DEVICE)
+    state_dict = torch.load(f=args.dir / 'model.pt', map_location=DEVICE)
     model.load_state_dict(state_dict=state_dict)
     model.eval()
 
