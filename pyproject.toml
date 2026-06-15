@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "random-walk-microstructures"
 version = "1.0.0"
-description = "This repository contains the code for our ACM SCF 2025 paper “Random-Walk Microstructures for Differentiable Topology Optimization.'"
+description = "This repository contains the code for our ACM SCF 2025 paper \"Random-Walk Microstructures for Differentiable Topology Optimization.\""
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"
 license = { file = "LICENSE" }

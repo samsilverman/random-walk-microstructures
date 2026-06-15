@@ -4,12 +4,16 @@ from __future__ import annotations
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
 import time
+from typing import TYPE_CHECKING
 
 from random_walk_microstructures import DEFAULT_DTYPE, DEFAULT_DEVICE
 from random_walk_microstructures import set_seed, load_data, split_indices, get_outputs_processor, CNN, data_transform
 import torch
 from torch import nn
 from torch.utils.data import TensorDataset, DataLoader
+
+if TYPE_CHECKING:
+    from argparse import Namespace
 
 DTYPE = DEFAULT_DTYPE
 DEVICE = DEFAULT_DEVICE
@@ -26,13 +30,38 @@ def build_parser() -> ArgumentParser:
     """
     parser = ArgumentParser(description='Test surrogate model.', formatter_class=ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('--percent-train', type=float, default=0.9, help='Fraction of samples used for training.')
-    parser.add_argument('--percent-valid', type=float, default=0.05, help='Fraction of samples used for validation.')
-    parser.add_argument('--seed', type=int, default=3019, help='RNG seed.')
+    parser.add_argument('--percent-train', type=float, default=0.9, help='Fraction of samples used for training during surrogate model training.')
+    parser.add_argument('--percent-valid', type=float, default=0.05, help='Fraction of samples used for validation during surrogate model training.')
+    parser.add_argument('--seed', type=int, default=3019, help='RNG seed used during surrogate model training.')
     parser.add_argument('--batch-size', type=int, default=64, help='Batch size.')
-    parser.add_argument('--dir', type=Path, default=Path('results'), help='Directory for saved model.')
+    parser.add_argument('--dir', type=Path, default=Path('results'), help='Directory containing the saved model.')
 
     return parser
+
+
+def validate_cli_arguments(args: Namespace, parser: ArgumentParser) -> None:
+    """Validate command-line interface (CLI) arguments.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        CLI arguments.
+    parser : argparse.ArgumentParser
+        Parser used to raise errors.
+
+    """
+    if args.percent_train <= 0 or args.percent_train > 1:
+        parser.error(f'--percent-train must be in (0, 1], got {args.percent_train}.')
+
+    if args.percent_valid <= 0 or args.percent_train + args.percent_valid > 1:
+        parser.error(f'--percent-valid must be in (0, {1 - args.percent_train}], got {args.percent_valid}.')
+
+    max_seed = 2**32 - 1
+    if args.seed < 0 or args.seed > max_seed:
+        parser.error(f'--seed must be in [0, {max_seed}], got {args.seed}.')
+
+    if args.batch_size <= 0:
+        parser.error(f'--batch-size must be positive, got {args.batch_size}.')
 
 
 def main() -> None:
@@ -46,18 +75,7 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
 
-    if args.percent_train <= 0 or args.percent_train > 1:
-        parser.error(f'--percent-train must be in (0, 1], got {args.percent_train}.')
-
-    if args.percent_valid <= 0 or args.percent_train + args.percent_valid > 1:
-        parser.error(f'--percent-valid must be in (0, {1 - args.percent_train}], got {args.percent_valid}.')
-
-    max_seed = 2**32 - 1
-    if args.seed < 0 or args.seed > max_seed:
-        parser.error(f'--seed must be in [0, {max_seed}], got {args.seed}.')
-
-    if args.batch_size <= 0:
-        parser.error(f'--batch-size must be positive, got {args.batch_size}.')
+    validate_cli_arguments(args=args, parser=parser)
 
     ###########################
     ########## Setup ##########

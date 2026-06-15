@@ -4,7 +4,7 @@ from __future__ import annotations
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from copy import deepcopy
 from pathlib import Path
-from typing import List
+from typing import List, TYPE_CHECKING
 
 from matplotlib import pyplot as plt
 from random_walk_microstructures import DEFAULT_DTYPE, DEFAULT_DEVICE
@@ -14,6 +14,9 @@ from torch import nn
 from torch import optim
 from torch.utils.data import TensorDataset, DataLoader
 from tqdm import trange
+
+if TYPE_CHECKING:
+    from argparse import Namespace
 
 DTYPE = DEFAULT_DTYPE
 DEVICE = DEFAULT_DEVICE
@@ -35,7 +38,8 @@ def build_parser() -> ArgumentParser:
     parser.add_argument('--percent-valid', type=float, default=0.05, help='Fraction of samples used for validation.')
     parser.add_argument('--seed', type=int, default=3019, help='RNG seed.')
     parser.add_argument('--batch-size', type=int, default=64, help='Batch size.')
-    parser.add_argument('--out-dir', type=Path, default=Path('results'), help='Output directory for saved model.')
+    parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate.')
+    parser.add_argument('--out-dir', type=Path, default=Path('results'), help='Output directory for the saved model.')
     parser.add_argument('--resume', action='store_true', help='Resume training.')
 
     return parser
@@ -70,17 +74,17 @@ def visualize_losses(train_losses: List[float], valid_losses: List[float], file:
         plt.show()
 
 
-def main() -> None:
-    """Train surrogate model from the command line.
+def validate_cli_arguments(args: Namespace, parser: ArgumentParser) -> None:
+    """Validate command-line interface (CLI) arguments.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        CLI arguments.
+    parser : argparse.ArgumentParser
+        Parser used to raise errors.
 
     """
-    #############################################
-    ########## CLI argument validation ##########
-    #############################################
-
-    parser = build_parser()
-    args = parser.parse_args()
-
     if args.epochs <= 0:
         parser.error(f'--epochs must be positive, got {args.epochs}.')
 
@@ -97,8 +101,25 @@ def main() -> None:
     if args.batch_size <= 0:
         parser.error(f'--batch-size must be positive, got {args.batch_size}.')
 
+    if args.lr <= 0:
+        parser.error(f'--lr must be positive, got {args.lr}.')
+
     if args.resume:
         args.resume = (args.out_dir / 'checkpoint.pt').is_file()
+
+
+def main() -> None:
+    """Train surrogate model from the command line.
+
+    """
+    #############################################
+    ########## CLI argument validation ##########
+    #############################################
+
+    parser = build_parser()
+    args = parser.parse_args()
+
+    validate_cli_arguments(args=args, parser=parser)
 
     ###########################
     ########## Setup ##########
@@ -142,9 +163,9 @@ def main() -> None:
 
     print_model(model)
 
-    #Criterion and optimizer
+    # Criterion and optimizer
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(params=model.parameters(), lr=1e-4)
+    optimizer = optim.Adam(params=model.parameters(), lr=args.lr)
 
     ##############################
     ########## Training ##########
@@ -222,6 +243,8 @@ def main() -> None:
 
         model.load_state_dict(state_dict=model_state_dict)
         optimizer.load_state_dict(optimizer_state_dict)
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = args.lr
 
     # Training loop
     start_epoch = len(train_losses) + 1

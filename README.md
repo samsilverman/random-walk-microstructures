@@ -51,7 +51,7 @@ The codebase is organized into two parts:
 
 > [!NOTE]
 > Each tool can be run from the repository root.
-> For info on a specific tool/args run:
+> For info on a specific tool run:
 >
 > ```bash
 > python tools/[TOOL].py --help
@@ -64,8 +64,7 @@ The codebase is organized into two parts:
 ## Acknowledgements
 
 The authors would like to thank Ruichen Liu for fabricating the optimized microstructure designs and Alec Ewe for running the compression tests on the fabricated samples.
-This work was supported by a Focused Research Program from the Rafik B. Hariri Institute for Computing and Computational Science & Engineering at Boston University and by the National Science Foundation
-(DMR-2323728).
+This work was supported by a Focused Research Program from the Rafik B. Hariri Institute for Computing and Computational Science & Engineering at Boston University and by the National Science Foundation (DMR-2323728).
 
 ## Citation
 

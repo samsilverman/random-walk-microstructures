@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
-from typing import get_args, Literal
+from typing import get_args, Literal, TYPE_CHECKING
 
 from matplotlib import pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
@@ -15,6 +15,9 @@ import torch
 from torch import nn
 from torch import optim
 from tqdm import trange
+
+if TYPE_CHECKING:
+    from argparse import Namespace
 
 DTYPE = DEFAULT_DTYPE
 DEVICE = 'cpu'
@@ -164,30 +167,31 @@ def build_parser() -> ArgumentParser:
 
     parser.add_argument('--vf', type=float, required=True, help='Target volume fraction.')
     parser.add_argument('--objective', choices=get_args(Objective), default='iso', help='Topology optimization objective function.')
-    parser.add_argument('--model-dir', type=Path, default=Path('results'), help='Output directory for saved model.')
-    parser.add_argument('--out-dir', type=Path, default=Path('results'), help='Output directory for saved results.')
+    parser.add_argument('--dir', type=Path, default=Path('results'), help='Directory containing the saved model.')
+    parser.add_argument('--out-dir', type=Path, default=Path('results'), help='Output directory for the saved results.')
     parser.add_argument('--smooth-start', type=float, default=1.0, help='Initial weight of the smoothness penalization.')
     parser.add_argument('--smooth-end', type=float, default=100.0, help='Final weight of the smoothness penalization.')
     parser.add_argument('--density-start', type=float, default=1.0, help='Initial weight of the density penalization.')
     parser.add_argument('--density-end', type=float, default=100.0, help='Final weight of the density penalization.')
     parser.add_argument('--epochs', type=int, default=1000, help='Number of epochs.')
+    parser.add_argument('--lr', type=float, default=0.01, help='Learning rate.')
     parser.add_argument('--seed', type=int, default=3019, help='RNG seed.')
     parser.add_argument('--visualize', action='store_true', help='Visualize optimization.')
 
     return parser
 
 
-def main() -> None:
-    """Topology optimization from the command line.
+def validate_cli_arguments(args: Namespace, parser: ArgumentParser) -> None:
+    """Validate command-line interface (CLI) arguments.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        CLI arguments.
+    parser : argparse.ArgumentParser
+        Parser used to raise errors.
 
     """
-    #############################################
-    ########## CLI argument validation ##########
-    #############################################
-
-    parser = build_parser()
-    args = parser.parse_args()
-
     if args.vf < 0 or args.vf > 1:
         parser.error(f'--vf must be in [0, 1], got {args.vf}.')
 
@@ -209,9 +213,26 @@ def main() -> None:
     if args.epochs <= 0:
         parser.error(f'--epochs must be positive, got {args.epochs}.')
 
+    if args.lr <= 0:
+        parser.error(f'--lr must be positive, got {args.lr}.')
+
     max_seed = 2**32 - 1
     if args.seed < 0 or args.seed > max_seed:
         parser.error(f'--seed must be in [0, {max_seed}], got {args.seed}.')
+
+
+def main() -> None:
+    """Topology optimization from the command line.
+
+    """
+    #############################################
+    ########## CLI argument validation ##########
+    #############################################
+
+    parser = build_parser()
+    args = parser.parse_args()
+
+    validate_cli_arguments(args=args, parser=parser)
 
     ###########################
     ########## Setup ##########
@@ -242,7 +263,7 @@ def main() -> None:
     design = Design().to(dtype=DTYPE, device=DEVICE)
 
     # Optimizer
-    optimizer = optim.Adam(design.parameters(), lr=0.01)
+    optimizer = optim.Adam(design.parameters(), lr=args.lr)
 
     # Live visualization setup
     cmap = LinearSegmentedColormap.from_list(name='white_to_C0', colors=['white', 'C0'], N=256)

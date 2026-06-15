@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
@@ -10,6 +11,9 @@ from matplotlib.collections import PolyCollection
 import numpy as np
 from skimage import measure, filters
 import triangle as tr
+
+if TYPE_CHECKING:
+    from argparse import Namespace
 
 CURR_DIR = Path(__file__).resolve().parent
 
@@ -33,6 +37,24 @@ def build_parser() -> ArgumentParser:
     return parser
 
 
+def validate_cli_arguments(args: Namespace, parser: ArgumentParser) -> None:
+    """Validate command-line interface (CLI) arguments.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        CLI arguments.
+    parser : argparse.ArgumentParser
+        Parser used to raise errors.
+
+    """
+    if args.n <= 0:
+        parser.error(f'--n must be positive, got {args.n}.')
+
+    if args.t <= 0:
+        parser.error(f'--t must be positive, got {args.t}.')
+
+
 def main() -> None:
     """Export microstructure design stored in CSV file to an OBJ mesh from the command line.
 
@@ -44,11 +66,7 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
 
-    if args.n <= 0:
-        parser.error(f'--n must be positive, got {args.n}.')
-
-    if args.t <= 0:
-        parser.error(f'--t must be positive, got {args.t}.')
+    validate_cli_arguments(args=args, parser=parser)
 
     ###########################
     ########## Setup ##########
@@ -62,7 +80,7 @@ def main() -> None:
     in_file = Path(args.file).resolve()
 
     # Output OBJ file
-    out_file = in_file.with_suffix('.obj')
+    out_file = in_file.with_suffix(suffix='.obj')
 
     cmap = LinearSegmentedColormap.from_list(name='white_to_C0', colors=['white', 'C0'], N=256)
 
